@@ -6,6 +6,7 @@ var mapURLbase = "http://q-prod.net/BTT/Pictures/Levels/";
 var weekliesURLbase = "http://q-prod.net/BTT/challenges.php?discord=1";
 var thsURLbase = "http://q-prod.net/BTT/api/discord_ths.php";
 var ranksearchURLbase = "http://q-prod.net/BTT/api/discord_ranksearch.php";
+var compareURLbase = "http://q-prod.net/BTT/api/discord_compare.php";
 var mapURLClassic = "Classic/";
 var mapURLSSBM = "SSBM/";
 var mapURLPrefixClassic = "Stage%20";
@@ -37,7 +38,7 @@ function httpGetAsync(theUrl, callback) {
 }
 
 function sendMessageToChat(theText) {
-    theChannel.send(theText);
+    theChannel.send(theText,{split:true});
 }
 
 client.on("ready", () => {
@@ -175,6 +176,34 @@ client.on("message", (message) => {
                     levelValue = 1;
                 }
                 var url = ranksearchURLbase + "?character=" + characterValue + "&type=" + levelValue + "&nickname=" + nickname;
+                theChannel = message.channel;
+                httpGetAsync(url, sendMessageToChat);
+
+            }
+
+        }
+
+        if (command === "compare") {
+            // Compare the score between 2 players
+            if (commandlistLength == 5) {
+                var p1 = commandList[1];
+                var p2 = commandList[2];
+                var levelType = commandList[4]; //done
+                var character = commandList[3]; //done
+                if (character.toLowerCase() != "zerex" && character.toLowerCase() != "planck" && character.toLowerCase() != "p" && character.toLowerCase() != "z") { return; }
+
+                var characterValue = 0;
+                if (character == "zerex" || character == "z") {
+                    characterValue = 1;
+                }
+                var levelValue = 0;
+                if (levelType.toLowerCase() == "classic") {
+                    levelValue = 0;
+                }
+                else if (levelType.toLowerCase() == "ssbm") {
+                    levelValue = 1;
+                }
+                var url = compareURLbase + "?character=" + characterValue + "&type=" + levelValue + "&p1=" + p1 + "&p2=" + p2;
                 theChannel = message.channel;
                 httpGetAsync(url, sendMessageToChat);
 
