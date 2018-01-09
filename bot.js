@@ -239,4 +239,4 @@ client.on("message", (message) => {
     }
 });
 
-client.login("Mzk5MTA1OTA0OTk5NjYxNTcy.DTIP9A.gYE-JVBvk6pNcpAzTjVLaJdGSlg");
+client.login("");
