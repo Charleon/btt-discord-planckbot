@@ -47,7 +47,7 @@ client.on("ready", () => {
 
 client.on("message", (message) => {
     // Direct replies
-    if (message.content.toLowerCase().indexOf("thank you planck") !== -1) {
+    if (message.content.toLowerCase().indexOf("thank you") !== -1) {
         const emoji = client.emojis.find("name", "pda");
         message.reply("You're welcome! " + emoji);
         return;
@@ -74,8 +74,11 @@ client.on("message", (message) => {
 
                     url = getClassicStageLink(levelNumber);
                 }
-
-                message.channel.send(url);
+                const embed = new Discord.RichEmbed() 
+                .setTitle((command+" "+levelNumber).toUpperCase())
+                .setImage(url)
+                .setColor(0x0086AE);
+                message.channel.send({embed});
             }
         }
 
@@ -88,8 +91,11 @@ client.on("message", (message) => {
                 if (Number(levelNumber) > 0 && Number(levelNumber) < 26) {
                     url = getSSBMStageLink(levelNumber);
                 }
-
-                message.channel.send(url);
+                const embed = new Discord.RichEmbed() 
+                .setTitle((command+" "+levelNumber).toUpperCase())
+                .setImage(url)
+                .setColor(0xAE0028);
+                message.channel.send({embed});
             }
         }
 
@@ -131,6 +137,13 @@ client.on("message", (message) => {
             message.channel.send("My Daddy <3");
         }
 
+        if (command === "alive") {
+            const emoji = client.emojis.find("name", "pda");
+            message.channel.send("Hi, I'm ready to help!\n"+emoji);
+            
+
+        }
+
         if (command === "wc") {
             // Display actives Weekly Challenges.
             theChannel = message.channel;
@@ -154,8 +167,40 @@ client.on("message", (message) => {
             message.channel.send("```!commands```");
 
         }
+        
+        if (command === "embed") {
+            // Display some commands exemples.
+         
+        const embed = new Discord.RichEmbed()
+        .setTitle("This is your title, it can hold 256 characters")
+        .setAuthor("Author Name", "https://i.imgur.com/lm8s41J.png")
+        /*
+        * Alternatively, use "#00AE86", [0, 174, 134] or an integer number.
+        */
+        .setColor(0x00AE86)
+        .setDescription("This is the main body of text, it can hold 2048 characters.")
+        .setFooter("This is the footer text, it can hold 2048 characters", "http://i.imgur.com/w1vhFSR.png")
+        .setImage("http://i.imgur.com/yVpymuV.png")
+        .setThumbnail("http://i.imgur.com/p2qNFag.png")
+        /*
+        * Takes a Date object, defaults to current date.
+        */
+        .setTimestamp()
+        .setURL("https://discord.js.org/#/docs/main/indev/class/RichEmbed")
+        .addField("This is a field title, it can hold 256 characters",
+            "This is a field value, it can hold 2048 characters.")
+        /*
+        * Inline fields may not display as inline if the thumbnail and/or image is too big.
+        */
+        .addField("Inline Field", "They can also be inline.", true)
+        /*
+        * Blank field, useful to create some space.
+        */
+        .addBlankField(true)
+        .addField("Inline Field 3", "You can have a maximum of 25 fields.", true);
 
-
+        message.channel.send({embed});    
+        }
         if (command === "search") {
             // Search a nickname in the database, and display how well it's ranked
             if (commandlistLength == 4) {
@@ -229,6 +274,8 @@ client.on("message", (message) => {
                 c+"!lb <character> <leveltype> <levelNumber>"+c+"\n"+
             "Search how well a nickname is ranked. *Parameters = \<nickname\> = nickname to search. <character> = z, zerex, p, planck. <leveltype> = classic, ssbm.*\n" +
                 c+"!search  \<nickname\> <character> <leveltype>"+c+"\n"+
+            "Compare the scores of 2 players. *Parameters = \<p1\> \<p1\> = nicknames to search. <character> = z, zerex, p, planck. <leveltype> = classic, ssbm.*\n" +
+                c+"!search  \<p1\> \<p2\> <character> <leveltype>"+c+"\n"+
             "Total Cumulated World Records\n" +
                 c+"!ths"+c+"\n"+
             "Active Weekly Challenges\n" +
