@@ -7,6 +7,7 @@ var weekliesURLbase = "http://q-prod.net/BTT/challenges.php?discord=1";
 var thsURLbase = "http://q-prod.net/BTT/api/discord_ths.php";
 var ranksearchURLbase = "http://q-prod.net/BTT/api/discord_ranksearch.php";
 var compareURLbase = "http://q-prod.net/BTT/api/discord_compare.php";
+var battleURLbase = "http://q-prod.net/BTT/api/discord_battle.php";
 var mapURLClassic = "Classic/";
 var mapURLSSBM = "SSBM/";
 var mapURLPrefixClassic = "Stage%20";
@@ -38,6 +39,7 @@ function httpGetAsync(theUrl, callback) {
 }
 
 function sendMessageToChat(theText) {
+    
     theChannel.send(theText,{split:true});
 }
 
@@ -77,6 +79,7 @@ client.on("message", (message) => {
                 const embed = new Discord.RichEmbed() 
                 .setTitle((command+" "+levelNumber).toUpperCase())
                 .setImage(url)
+                .setFooter(message.content)
                 .setColor(0x0086AE);
                 message.channel.send({embed});
             }
@@ -94,6 +97,7 @@ client.on("message", (message) => {
                 const embed = new Discord.RichEmbed() 
                 .setTitle((command+" "+levelNumber).toUpperCase())
                 .setImage(url)
+                .setFooter(message.content)
                 .setColor(0xAE0028);
                 message.channel.send({embed});
             }
@@ -150,6 +154,22 @@ client.on("message", (message) => {
             httpGetAsync(weekliesURLbase, sendMessageToChat);
         }
 
+        if (command === "battle") {
+            // DISCORD BATTLE \o/.
+            if (commandlistLength == 2){
+                
+                if (commandList[1]=="create") {
+                theChannel = message.channel;
+                httpGetAsync(battleURLbase+"?create=1", sendMessageToChat);
+                }
+                else  {
+                    theChannel = message.channel;
+                    httpGetAsync(battleURLbase+"?status="+commandList[1], sendMessageToChat);
+                    }
+                }
+
+        }
+
         if (command === "planck") {
             // Display some commands exemples.
             theChannel = message.channel;
@@ -169,7 +189,8 @@ client.on("message", (message) => {
         }
         
         if (command === "embed") {
-            // Display some commands exemples.
+            // Display some commands exemples. Don't delete for further references :D
+
          
         const embed = new Discord.RichEmbed()
         .setTitle("This is your title, it can hold 256 characters")
